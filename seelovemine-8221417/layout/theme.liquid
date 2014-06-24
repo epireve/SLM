@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">  
+  <head>
+    <script type="text/javascript">
+var yotpo_app_key = "DIG3lG4xiU5PDCvz3ieMI3KQyxmvjUa0LKNV9NJX";
+(function(){function e(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="//staticwww.yotpo.com/js/yQuery.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}window.attachEvent?window.attachEvent("onload",e):window.addEventListener("load",e,!1)})();
+</script>
+                    
+    <meta charset="utf-8">
+    <meta http-equiv="cleartype" content="on">
+    <meta name="robots" content="index,follow">
+      
+    <title>
+      {% if template contains "index" and page_title != 'Welcome' %}
+        {{ page_title }}
+      {% elsif template contains "index" and pages[settings.homepage].title != blank %}
+        {{ pages[settings.homepage].title }} | {{ shop.name }}
+      {% else %}
+        {{ page_title }}
+        {% if current_tags %}tagged "{{ current_tags }}"{% endif %}
+        {% if current_page != 1 %}Page {{ current_page }}{% endif %}
+        | {{ shop.name }}
+      {% endif %}
+    </title>
+    
+    
+    {% if template contains 'list-collections' %}
+      <meta name="description" content="Product collections from {{ shop.name }} - Page {{ current_page}}" />
+    {% elsif page_description != '' %}
+      <meta name="description" content="{{ page_description }}" />
+    {% endif %}
+
+    {% if settings.twitter_username != '' %}
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:site" content="@{{ settings.twitter_username }}">
+      <meta name="twitter:creator" content="@{{ settings.twitter_username }}">
+    {% endif %}
+
+    {% if template contains 'product' %}
+      <meta property="og:url" content="{{ shop.url }}{{ product.url }}" />
+      <meta property="og:title" content="{{ page_title | escape }}" />
+      <meta property="og:description" content="{{ page_description | escape }}" />
+      <meta property="og:image" content="{{ product.featured_image | product_img_url: 'medium' }}" />
+      <meta property="og:type" content="product" />
+      <meta property="og:price:amount" content="{{ product.price | money_without_currency }}" />
+      <meta property="og:price:currency" content="{{ shop.currency }}" />
+      <meta property="og:availability" content="{% if product.available %}instock{% else %}out of stock{% endif %}" />
+    {% elsif template contains 'article' %}
+      <meta property="og:url" content="{{ shop.url }}{{ article.url }}" />
+      <meta property="og:title" content="{{ page_title | escape }}" />
+      <meta property="og:description" content="{{ page_description | escape }}" />
+      <meta property="og:type" content="article" />
+      {% if article.content contains "<img" %}
+        {% assign src = article.content | split: 'src="' %}
+        {% assign src = src[1] | split: '"' | first | replace: '//cdn', 'http://cdn' | replace: 'http:http://', 'http://' | remove: 'https:' %}
+        {% if src %}<meta property="og:image" content="{{ src }}" />{% endif %}
+      {% endif %}
+    {% else %}
+      {% if settings.use_logo %}
+        <meta property="og:image" content="{{ 'logo.png' | asset_url }}" />
+      {% endif %}
+      <meta property="og:url" content="{{ canonical_url }}" />
+      <meta property="og:title" content="{{ page_title | escape }}" />
+      <meta property="og:description" content="{{ page_description | escape }}" />
+      <meta property="og:type" content="website" />
+    {% endif %}
+    
+    <meta property="og:site_name" content="{{ shop.name }}" />
+    <meta name="author" content="{{ shop.name }}">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
+
+    <!-- Stylesheets -->
+    {{ 'styles.css' | asset_url | stylesheet_tag }}
+
+    <!-- Icons -->
+    <link rel="shortcut 
+                                       " type="image/x-icon" href="{{ 'fav.png' | asset_url }}">
+    <link rel="canonical" href="{{ canonical_url }}" />
+
+    <!-- Custom Fonts -->
+    <link href='//fonts.googleapis.com/css?family=.|{% if settings.logo_typeface_method == "google_webfonts" %}{{ settings.logo_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.headline_typeface_method == "google_webfonts" %}{{ settings.headline_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.top_bar_typeface_method == "google_webfonts" %}{{ settings.top_bar_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.nav_typeface_method == "google_webfonts" %}{{ settings.nav_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.regular_typeface_method == "google_webfonts" %}{{ settings.regular_google_webfont_font }}:light,normal,bold{% endif %}' rel='stylesheet' type='text/css'>
+    
+    {% if template contains 'customer' %}
+      {{ "shopify_common.js" | shopify_asset_url | script_tag }}
+      {{ "customer_area.js"  | shopify_asset_url | script_tag }}
+      <!--[if lt IE 7]>
+        {{ 'json2.js' | shopify_asset_url | script_tag }}
+      <![endif]-->
+    {% endif %}
+        
+    <!-- jQuery and jQuery fallback -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write("<script src='{{ "jquery-1.8.3.min.js" | asset_url }}'>\x3C/script>")</script>
+    {{ 'app.js' | asset_url | script_tag }}
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+    {{ content_for_header }}
+  
+    {{ "font.css"  | asset_url | stylesheet_tag }}
+  
+  
+  </head>
+  <body>
+    
+    
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id; js.async=true;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+    <div class="top_bar">
+      <div class="container">
+        {% if settings.search_box_top_bar %}
+          <div class="four columns top_bar_search">          
+            <form class="search" action="/search">
+              <input type="hidden" name="type" value="product" />
+              <input type="text" name="q" class="search_box" placeholder="Search..." value="{% if search and search.results.first.price %}{{ search.terms }}{% endif %}" />
+            </form>
+          </div>
+        {% endif %}        
+        
+        <div class="twelve columns {% unless settings.search_box_top_bar %} offset-by-four {% endunless %}">
+          <ul>
+            <li>
+              {% if cart.item_count == 0 %}
+                <a href="/cart" title="Checkout" class="checkout">Checkout</a>
+              {% else %}
+                <a href="/checkout" title="Checkout" class="checkout">Checkout</a>
+              {% endif %}
+            </li>
+            <li>
+              <a href="/cart" class="cart" title="cart">cart ({{ cart.item_count }})</a>
+            </li>
+            {% if shop.customer_accounts_enabled %}
+              <li>
+                <a href="/account" title="My Account">My Account</a>
+              </li>
+            {% endif %}
+            
+            {% if settings.top_bar_linklist != blank %}
+              {% for link in linklists[settings.top_bar_linklist].links %}
+                <li>
+                  <a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+                </li>
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      </div>  
+    </div>
+  
+    <div class="container content"> 
+      {% include "social-buttons" with "global" %}
+      <div class="sixteen columns logo">
+        <a href="{{ shop.url }}" title="{{ shop.name }}">
+          {% if settings.use_logo %}
+            <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" />
+          {% else %}
+            {{ shop.name }}
+          {% endif %}
+        </a>
+      </div>
+      
+      <!-- <div class="sixteen columns clearfix">
+        <div id="nav">
+          <ul id="menu">
+            {% for link in linklists[settings.main_linklist].links %}
+              {% if linklists[link.handle] == empty %}
+                <li><a href="{{ link.url }}" title="{{ link.title }}" {% if link.active %}class="active"{% endif %}>{{ link.title }}</a></li>
+              {% else %}
+                <li><a href="{{ link.url }}" title="{{ link.title }}" {% if link.active %}class="active"{% endif %} {% for link in linklists[link.handle].links %}{% if link.active %}class="active"{% endif %}{% endfor %}>{{ link.title }} 
+                  <span class="arrow">&or;</span></a> 
+                  <ul>
+                    {% for link in linklists[link.handle].links %}
+                      {% if linklists[link.handle] == empty %}
+                        <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+                      {% else %}
+                      <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }} <span class="arrow"> &gt;</span></a> 
+                        <ul>
+                          {% for link in linklists[link.handle].links %}                        
+                            <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div> -->
+      
+      {% if settings.featured_content_page != blank %}
+        <div class="sixteen columns">
+          <div class="section clearfix featured_content">
+            {{ pages[settings.featured_content_page].content }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if template contains 'list-collections' %}
+        {% include 'collection-listing' %}
+      {% else %}
+        {{ content_for_layout }}
+      {% endif %}
+      
+    </div> <!-- end container -->
+
+    <div class="footer">
+      <script type="text/javascript">
+        setTimeout(function(){var a=document.createElement("script");
+        var b=document.getElementsByTagName("script")[0];
+        a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0020/4125.js?"+Math.floor(new Date().getTime()/3600000);
+        a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+      </script>
+
+
+      <div class="container">
+        <div class="sixteen columns">
+
+          <div class="one-third column alpha">
+             {% if settings.newsletter_enabled %}
+                <h6>Newsletter</h6>
+              
+                {% if settings.newsletter_system == 'mailchimp' %}
+              
+                  <form action="{{ settings.mailchimp_link }}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="contact-form" target="_blank">
+                    <input type="email" value="" name="EMAIL" class="required email" id="contact_email" placeholder="Enter your email address...">
+                    <input type="submit" value="Sign Up" name="subscribe" id="mc-embedded-subscribe" class="submit">
+                  </form>
+                {% else %}    
+              
+                  {% form 'customer' %}
+                     {% if form.posted_successfully? %}
+                       <p><em>Thank you for joining our mailing list!</em></p>
+                     {% elsif form.errors %}
+                       {% for field in form.errors %}
+                         <p><em>{{ field }} - {{ form.errors.messages[field] }}</em></p>
+                       {% endfor %}
+                     {% endif %}
+
+                     <input type="hidden" id="contact_tags" name="contact[tags]" value="prospect,newsletter"/>
+                     <input type="hidden" id="newsletter-first-name" name="contact[first_name]" value="Newsletter" />
+                     <input type="hidden" id="newsletter-last-name" name="contact[last_name]" value="Subscriber" />
+                     <input type="email" id="contact_email" name="contact[email]" required pattern="[^ @]*@[^ @]*" placeholder="Enter your email address..." />
+                     <input type='submit' class="submit" value="Sign Up" />
+                   {% endform %}
+
+                {% endif %}
+              {% endif %}
+
+            {% if settings.enable_social_links %}
+
+              <h6 class="social">Social</h6>
+
+              {% if settings.twitter_link != '' %}
+                <a href="{{ settings.twitter_link }}" title="{{ shop.name }} on Twitter" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "twitter.png" | asset_url }}" alt="Twitter" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.facebook_link != '' %}
+                <a href="{{ settings.facebook_link }}" title="{{ shop.name }} on Facebook" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "facebook.png" | asset_url }}" alt="Facebook" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.google_link != '' %}
+                <a href="{{ settings.google_link }}" title="{{ shop.name }} on Google+" class="social_link" rel="publisher" target="_blank">
+                  <img src="{{ "google.png" | asset_url }}" alt="Google+" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.youtube_link != '' %}
+                <a href="{{ settings.youtube_link }}" title="{{ shop.name }} on YouTube" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "youtube.png" | asset_url }}" alt="YouTube" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.pinterest_link != '' %}
+                <a href="{{ settings.pinterest_link }}" title="{{ shop.name }} on Pinterest" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "pinterest.png" | asset_url }}" alt="Pinterest" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.tumblr_link != '' %}
+                <a href="{{ settings.tumblr_link }}" title="{{ shop.name }} on Tumblr" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "tumblr.png" | asset_url }}" alt="Tumblr" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.instagram_link != '' %}
+                <a href="{{ settings.instagram_link }}" title="{{ shop.name }} on Instagram" class="social_link" rel="me" target="_blank"> 
+                  <img src="{{ "instagram.png" | asset_url }}" alt="Instagram" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.linkedin_link != '' %}
+                <a href="{{ settings.linkedin_link }}" title="{{ shop.name }} on LinkedIn" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "linkedin.png" | asset_url }}" alt="LinkedIn" />
+                </a>              
+              {% endif %}
+              
+              {% if settings.flickr_link != '' %}
+                <a href="{{ settings.flickr_link }}" title="{{ shop.name }} on Flickr" class="social_link" rel="me" target="_blank">
+                  <img src="{{ "flickr.png" | asset_url }}" alt="Flickr" />
+                </a>              
+              {% endif %}
+              
+            {% endif %}
+          </div>
+
+
+          <div class="one-third column">
+            <h6>{{ linklists.footer.title }}</h6>
+            <ul>
+              {% for link in linklists.footer.links %}
+                <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="one-third column omega">
+            
+            {% if settings.footer_content_page != blank %}
+              <h6>{{ pages[settings.footer_content_page].title }}</h6>
+
+              {{ pages[settings.footer_content_page].content }}
+
+            {% endif %}
+
+            <div class="payment_methods">
+              {% if settings.use_paypal %}<img src="{{ 'cc-paypal.gif' | asset_url }}" alt="PayPal" />{% endif %}
+              {% if settings.use_visa %}<img src="{{ 'cc-visa.gif' | asset_url }}" alt="Visa" />{% endif %}
+              {% if settings.use_visaelectron %}<img src="{{ 'cc-visaelectron.gif' | asset_url }}" alt="Visa Electron" />{% endif %}
+              {% if settings.use_mastercard %}<img src="{{ 'cc-mastercard.gif' | asset_url }}" alt="Mastercard" />{% endif %}
+              {% if settings.use_amex %}<img src="{{ 'cc-amex.gif' | asset_url }}" alt="American Express" />{% endif %}
+              {% if settings.use_cirrus %}<img src="{{ 'cc-cirrus.gif' | asset_url }}" alt="Cirrus" />{% endif %}
+              {% if settings.use_delta %}<img src="{{ 'cc-delta.gif' | asset_url }}" alt="Delta" />{% endif %}
+              {% if settings.use_discover %}<img src="{{ 'cc-discover.gif' | asset_url }}" alt="Discover" />{% endif %}
+              {% if settings.use_western_union %}<img src="{{ 'cc-westernunion.gif' | asset_url }}" alt="Western Union" />{% endif %}
+            </div>
+            <p class="credits" style="font-weight:bold">
+              We also accept cash on deliver and bank transfers.
+            </p>
+            <p class="credits">
+              {{ settings.copyright_text }} {% if settings.copyright_text != blank %}<br />{% endif %}
+              {% if settings.display_designed_by == true %}<a href="http://outofthesandbox.com/collections/responsive-theme" target="_blank" title="Responsive Ecommerce Theme by Out of the Sandbox">Responsive Ecommerce Theme</a><br />{% endif %}
+              <!--{{ powered_by_link | replace: '" target', '?ref=out-of-the-sandbox" target' }}-->
+            </p>
+              
+          </div>
+        </div>
+      </div>
+    </div> <!-- end footer -->
+
+    {% if settings.display_social_buttons or settings.display_social_buttons_blog %}
+      <script type="text/javascript">
+        (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+      </script>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.async=true;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    {% endif %}
+
+  </body>
+</html>
