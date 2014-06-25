@@ -1,7 +1,15 @@
 <!-- Navigation -->
 
-<div class="sixteen columns clearfix">
+<div class="one columns clearfix">
   <div id="nav">
+    <div id="canvas"></div>
+    <div id="navshot">
+      <span class="curator">YASMIN'S</span>
+      <br/>
+      <span class="top5">Top 5</span>
+      <br/>
+      <span class="favnow">FAVOURITES <b>NOW</b></span>
+    </div>
     <ul id="menu">
       {% for link in linklists[settings.main_linklist].links %}
         {% if linklists[link.handle] == empty %}
